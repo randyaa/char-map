@@ -1,13 +1,18 @@
-<md-sidenav-container>
-  <md-sidenav #sidenav mode="side" opened="true">
+<md-toolbar>
+  <button md-button (click)="sidenav.toggle()"><md-icon>menu</md-icon></button>
+  <!--<button md-button (click)="openDialog()">Launch dialog</button>-->
+</md-toolbar>
+<md-sidenav-container class="char-container">
+  <md-sidenav #sidenav mode="side" opened="false" class="char-sidenav">
     <md-list>
-      <md-list-item><md-slide-toggle (change)="toggleCharacterPath('malexik')">Malexik</md-slide-toggle></md-list-item>
-      <md-list-item><md-slide-toggle (change)="toggleCharacterPath('tikara')">Tikara</md-slide-toggle></md-list-item>
+      <!--<md-list-item><md-slide-toggle (change)="toggleCharacterPath('malexik')">Malexik</md-slide-toggle></md-list-item>-->
+      <!--<md-list-item><md-slide-toggle (change)="toggleCharacterPath('tikara')">Tikara</md-slide-toggle></md-list-item>-->
+      <md-list-item *ngFor="let char of chars | keys">
+        <md-slide-toggle (change)="toggleCharacterPath(char.key)">{{char.key}}</md-slide-toggle>
+      </md-list-item>
     </md-list>
   </md-sidenav>
-  <div>
-    <md-card>
+  <div class="char-sidenav-content">
       <div #map id="container"></div>
-    </md-card>
   </div>
 </md-sidenav-container>

@@ -7,12 +7,15 @@ import { MaterialModule } from '@angular/material';
 
 import 'hammerjs';
 
-import { AppComponent } from './app.component';
+import {AppComponent, DialogResultExampleDialog, KeysPipe} from './app.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    KeysPipe,
+    DialogResultExampleDialog,
   ],
+  entryComponents: [DialogResultExampleDialog],
   imports: [
     BrowserModule,
     FormsModule,

@@ -1,7 +1,18 @@
-import {Component, ViewChild, AfterViewInit} from '@angular/core';
+import {Component, ViewChild, AfterViewInit, Pipe, PipeTransform} from '@angular/core';
+import {MdDialog, MdDialogRef} from '@angular/material';
 
 import * as Konva from 'konva';
-import {forEach} from "@angular/router/src/utils/collection";
+
+@Pipe({name: 'keys'})
+export class KeysPipe implements PipeTransform {
+  transform(value, args:string[]) : any {
+    let keys = [];
+    for (let key in value) {
+      keys.push({key: key, value: value[key]});
+    }
+    return keys;
+  }
+}
 
 @Component({
   selector: 'app-root',
@@ -19,7 +30,16 @@ export class AppComponent implements AfterViewInit {
   ratio = 1;
 
   chars:any = {
-    "malexik": {
+    "Nogil": {
+      layer:undefined,
+      show:false,
+      waypoints: [
+        [0,0],
+        [100,100],
+      ],
+      color: "blue"
+    },
+    "Malexik": {
       layer:undefined,
       show:false,
       waypoints:[
@@ -30,7 +50,7 @@ export class AppComponent implements AfterViewInit {
       ],
       color: 'red',
     },
-    "tikara": {
+    "Tikara": {
       layer:undefined,
       show:false,
       waypoints:[
@@ -43,6 +63,27 @@ export class AppComponent implements AfterViewInit {
       color: 'green',
     }
   };
+
+  constructor(public dialog: MdDialog) {}
+
+  openDialog(event) {
+    let dialogRef= this.dialog.open(DialogResultExampleDialog);
+    dialogRef.componentInstance.position= {
+      x:Math.floor(event.layerX/this.ratio),
+      y:Math.floor(event.layerY/this.ratio)
+    };
+    dialogRef.componentInstance.ratio=this.ratio;
+    dialogRef.componentInstance.findClosest();
+    dialogRef.componentInstance.chars=this.chars;
+    dialogRef.afterClosed().subscribe(result => {
+      if (this.chars[result]) {
+        this.chars[result].waypoints.push([
+          Math.floor(event.layerX / this.ratio),
+          Math.floor(event.layerY / this.ratio)
+        ]);
+      }
+    });
+  }
 
   toggleCharacterPath(charName){
     let theChar = this.chars[charName];
@@ -91,6 +132,11 @@ export class AppComponent implements AfterViewInit {
       height: window.innerHeight
     });
 
+    this.stage.on('click', (e) => {
+      this.openDialog(e.evt);
+      // alert('it happened!' + e.evt.x + " by " + e.evt.y);
+    });
+
     let newDimensions = this.calculateAspectRatioFit(3600, 2329, window.innerWidth, window.innerHeight);
 
     // add canvas element
@@ -110,4 +156,38 @@ export class AppComponent implements AfterViewInit {
     };
     imageObj.src = this.originalImage;
   }
+}
+
+@Component({
+  selector: 'dialog-result-example-dialog',
+  templateUrl: './dialog-result-example-dialog.html',
+})
+export class DialogResultExampleDialog {
+  position:any;
+  chars:any;
+  ratio:any;
+  points = [
+    {x: 1625, y: 865, name: "Waterdeep", distanceFromOrigin:undefined},
+    {x: 3380, y: 1100, name: "Hillsfar", distanceFromOrigin:undefined},
+    {x: 50, y: 50, name: "Unknown", distanceFromOrigin:undefined}
+  ];
+
+  //LowRes map
+  // Waterdeep @ 1625,865
+  // Hillsfar @ 3380,1100
+
+  findClosest() {
+    for (let knownLoc of this.points) {
+      knownLoc.distanceFromOrigin =
+        Math.sqrt(
+          Math.pow(knownLoc.x - this.position.x, 2) +
+          Math.pow(knownLoc.y - this.position.y, 2)
+        );
+    }
+
+    this.points.sort(function(a,b){
+      return a.distanceFromOrigin - b.distanceFromOrigin;
+    });
+  };
+  constructor(public dialogRef: MdDialogRef<DialogResultExampleDialog>) {}
 }

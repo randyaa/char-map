@@ -1,0 +1,16 @@
+<h2>Position</h2>
+<md-dialog-content>
+  <div>X:{{position.x}}</div>
+  <div>Y:{{position.y}}</div>
+  <div>
+    <h3>Closest Known Locations</h3>
+    <div *ngFor="let point of points" >
+      <div *ngIf="point.distanceFromOrigin<100">{{point.name}} at {{point.distanceFromOrigin}}</div>
+    </div>
+  </div>
+</md-dialog-content>
+<md-dialog-actions>
+  <button md-button [color]="primary"  *ngFor="let char of chars | keys" (click)="dialogRef.close(char.key)">{{char.key}}</button>
+  <button md-button md-dialog-close>Cancel</button>
+</md-dialog-actions>
+
