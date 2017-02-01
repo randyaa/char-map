@@ -102,7 +102,6 @@ export class AppComponent implements AfterViewInit {
     }
   }
 
-
   generateCharacterLayer(waypoints, color) {
     let points = [].concat.apply([], waypoints);
     points = points.map((e) => {
@@ -112,7 +111,7 @@ export class AppComponent implements AfterViewInit {
     let path = new Konva.Line({
       points: points,
       stroke: color,
-      strokeWidth: 5,
+      strokeWidth: 3,
       lineCap: 'round',
       lineJoin: 'round'
     });
