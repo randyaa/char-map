@@ -8,7 +8,7 @@
       <!--<md-list-item><md-slide-toggle (change)="toggleCharacterPath('malexik')">Malexik</md-slide-toggle></md-list-item>-->
       <!--<md-list-item><md-slide-toggle (change)="toggleCharacterPath('tikara')">Tikara</md-slide-toggle></md-list-item>-->
       <md-list-item *ngFor="let char of chars | keys">
-        <button md-button color="primary" (click)="alert('hello')"><md-icon color="primary">info</md-icon></button>
+        <button md-button color="primary" (click)="edit(char.key)"><md-icon color="primary">edit</md-icon></button>
         <md-slide-toggle (change)="toggleCharacterPath(char.key)">{{char.key}}</md-slide-toggle>
       </md-list-item>
     </md-list>

@@ -23,19 +23,42 @@ export class AppComponent implements AfterViewInit {
   //LowRes map
   // Waterdeep @ 1625,865
   // Hillsfar @ 3380,1100
+  // Daggerford @ 1741, 943
+  // Golden Fields @ [1704, 767],
+  // Citadel Albar @ [2308, 234],
+  // Ice spiers @ [2276, 187],
+  // GracklStugh UNDERDARK ROUGH ESTIMATE @ 1768, 401
+  // Thesk (?) ROUGH ESTIMATE @ [3376, 1673],
+  // island of ... ? [3057, 1713],
+  // westgate @ [3000, 1663],
+
+
+  // tikara village @ BOGUS [350, 750],
 
   @ViewChild('map') mapContainer;
   originalImage = 'assets/Sword-Coast-Map_LowRes.jpg';
   stage:Konva.Stage;
   ratio = 1;
+  editing:any;
 
   chars:any = {
     "Nogil": {
       layer:undefined,
       show:false,
       waypoints: [
-        [0,0],
-        [100,100],
+        [350, 750],
+        [2243,778],
+      ],
+      color: "blue"
+    },
+    "Vanak": {
+      layer:undefined,
+      show:false,
+      waypoints: [
+        [5000, 1350],
+        [3376, 1673],
+        [3057, 1713],
+        [3000, 1663],
       ],
       color: "blue"
     },
@@ -43,10 +66,13 @@ export class AppComponent implements AfterViewInit {
       layer:undefined,
       show:false,
       waypoints:[
-        [3380,1100],
-        [1625,865],
-        [500,500],
-        [30,1077],
+        [1768, 401],
+        [1677, 894],
+        [1704, 767],
+        [2308, 234],
+        [2276, 187],
+        [1741, 943],
+        [3333,1085],
       ],
       color: 'red',
     },
@@ -54,11 +80,9 @@ export class AppComponent implements AfterViewInit {
       layer:undefined,
       show:false,
       waypoints:[
-        [50,50],
-        [350,700],
-        [140,1010],
-        [30,1077],
-        [1400,788],
+        [350, 750],
+        [1677, 894],
+        [1704, 767],
       ],
       color: 'green',
     }
@@ -123,6 +147,12 @@ export class AppComponent implements AfterViewInit {
     this.ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
     return { width: srcWidth*this.ratio, height: srcHeight*this.ratio };
   };
+
+
+  edit(charName) {
+    this.editing = this.chars[charName];
+    alert('editing' + charName);
+  }
 
   ngAfterViewInit() {
     this.stage = new Konva.Stage({
